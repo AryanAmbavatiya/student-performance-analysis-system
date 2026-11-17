@@ -1,4 +1,4 @@
-SUBJECTS = ["Mathematics", "Digital Design", "Python"]
+SUBJECTS = ["CSAE100", "CSAE101", "MATH102", "EECE110", "ENVS151", "FSWD100"]
 
 students = []
 marks = []
@@ -78,15 +78,13 @@ def display_students():
     print("\n" + "=" * 75)
     print("STUDENT RECORDS")
     print("=" * 75)
-    print(f"{'Name':<20}{SUBJECTS[0]:>15}{SUBJECTS[1]:>18}{SUBJECTS[2]:>12}")
-    print("-" * 75)
+    print(f"{'Name':<20}" + "".join(f"{subject:>12}" for subject in SUBJECTS))
+    print("-" * (20 + 12 * len(SUBJECTS)))
 
     for name, student_marks in zip(students, marks):
         print(
             f"{name:<20}"
-            f"{student_marks[0]:>15.1f}"
-            f"{student_marks[1]:>18.1f}"
-            f"{student_marks[2]:>12.1f}"
+            + "".join(f"{mark:>12.1f}" for mark in student_marks)
         )
 
 
