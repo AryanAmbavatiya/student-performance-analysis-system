@@ -2,7 +2,7 @@
 
 A Python-based project developed for the Computational Thinking and Programming course at Bennett University.
 
-## Problem Statement.
+## Problem Statement
 
 Students often have difficulty analyzing their academic performance across multiple subjects. Calculating overall marks and averages manually can be time-consuming, and it may be difficult to identify high-performing students or subjects where improvement is needed.
 
