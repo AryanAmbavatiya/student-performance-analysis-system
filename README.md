@@ -16,7 +16,7 @@ This project provides a simple Python-based solution for entering and analyzing 
 - Identify high-performing and low-performing students and subjects.
 - Generate a summary of overall class performance.
 
-## Features
+## Features:
 
 - Student data entry
 - Marks validation
