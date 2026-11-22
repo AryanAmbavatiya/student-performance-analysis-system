@@ -1,7 +1,45 @@
+import csv
+
 SUBJECTS = ["CSAE100", "CSAE101", "MATH102", "EECE110", "ENVS151", "FSWD100"]
+DATA_FILE = "student_data.csv"
 
 students = []
 marks = []
+
+
+def save_data():
+    """Save all student records to a CSV file."""
+    with open(DATA_FILE, "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Name"] + SUBJECTS)
+        for name, student_marks in zip(students, marks):
+            writer.writerow([name] + student_marks)
+    print(f"Data saved in {DATA_FILE}.")
+
+
+def load_data():
+    """Load student records from the CSV file when the program starts."""
+    try:
+        with open(DATA_FILE, "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            header = next(reader, [])
+            if header != ["Name"] + SUBJECTS:
+                print("The saved file has an unexpected format.")
+                return
+
+            for row in reader:
+                if len(row) == len(SUBJECTS) + 1:
+                    try:
+                        saved_marks = [float(value) for value in row[1:]]
+                        if all(0 <= mark <= 100 for mark in saved_marks):
+                            students.append(row[0])
+                            marks.append(saved_marks)
+                    except ValueError:
+                        print("Skipped a row containing invalid marks.")
+
+        print(f"Loaded {len(students)} student record(s).")
+    except FileNotFoundError:
+        print("No saved data yet. Enter student data to create the file.")
 
 
 def get_valid_mark(subject):
@@ -18,9 +56,6 @@ def get_valid_mark(subject):
 
 def add_students():
     """Input student names and marks."""
-    students.clear()
-    marks.clear()
-
     while True:
         try:
             n = int(input("Enter number of students: "))
@@ -45,6 +80,7 @@ def add_students():
         students.append(name)
         marks.append(student_marks)
 
+    save_data()
     print("\nStudent data added successfully.")
 
 
@@ -210,11 +246,13 @@ def show_menu():
     print("5. Display subject averages")
     print("6. Display class summary")
     print("7. Search for a student")
-    print("8. Exit")
+    print("8. Save data")
+    print("9. Exit")
 
 
 def main():
-    """Run the project menu."""
+    """Load saved records and run the project menu."""
+    load_data()
     while True:
         show_menu()
         choice = input("Enter your choice: ").strip()
@@ -234,10 +272,13 @@ def main():
         elif choice == "7":
             search_student()
         elif choice == "8":
+            save_data()
+        elif choice == "9":
+            save_data()
             print("Thank you for using the Student Performance Analysis System.")
             break
         else:
-            print("Invalid choice. Please select 1-8.")
+            print("Invalid choice. Please select 1-9.")
 
 
 if __name__ == "__main__":
