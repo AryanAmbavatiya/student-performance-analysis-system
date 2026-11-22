@@ -234,6 +234,57 @@ def search_student():
         print("Student not found.")
 
 
+
+def delete_student():
+    """Delete one student's record after confirmation."""
+    if not students:
+        print("\nNo student records available to delete.")
+        return
+
+    name_to_delete = input("Enter the student name to delete: ").strip().lower()
+    found_index = -1
+
+    for i, name in enumerate(students):
+        if name.lower() == name_to_delete:
+            found_index = i
+            break
+
+    if found_index == -1:
+        print("Student not found. No records were deleted.")
+        return
+
+    confirmation = input(
+        f"Are you sure you want to delete {students[found_index]}? (yes/no): "
+    ).strip().lower()
+
+    if confirmation == "yes":
+        deleted_name = students.pop(found_index)
+        marks.pop(found_index)
+        save_data()
+        print(f"{deleted_name}'s record deleted successfully.")
+    else:
+        print("Deletion cancelled.")
+
+
+def delete_all_students():
+    """Delete all student records after confirmation."""
+    if not students:
+        print("\nThere are no student records to delete.")
+        return
+
+    confirmation = input(
+        "WARNING: This will delete ALL student records. Type yes to confirm: "
+    ).strip().lower()
+
+    if confirmation == "yes":
+        students.clear()
+        marks.clear()
+        save_data()
+        print("All student records deleted successfully.")
+    else:
+        print("Deletion cancelled.")
+
+
 def show_menu():
     """Display the main menu."""
     print("\n" + "=" * 65)
@@ -247,7 +298,9 @@ def show_menu():
     print("6. Display class summary")
     print("7. Search for a student")
     print("8. Save data")
-    print("9. Exit")
+    print("9. Delete a student record")
+    print("10. Delete all student records")
+    print("11. Exit")
 
 
 def main():
@@ -274,11 +327,15 @@ def main():
         elif choice == "8":
             save_data()
         elif choice == "9":
+            delete_student()
+        elif choice == "10":
+            delete_all_students()
+        elif choice == "11":
             save_data()
             print("Thank you for using the Student Performance Analysis System.")
             break
         else:
-            print("Invalid choice. Please select 1-9.")
+            print("Invalid choice. Please select 1-11.")
 
 
 if __name__ == "__main__":
