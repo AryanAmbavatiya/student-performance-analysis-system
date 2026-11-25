@@ -2,94 +2,133 @@
 <html>
 <head>
     <title>Student Performance Analysis System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Student Performance Analysis System</h1>
+    <div class="container">
+        <header>
+            <h1>Student Performance Analysis System</h1>
+            <p>Manage student marks and view academic performance.</p>
+        </header>
 
-    <h2>Add Student</h2>
-    <form action="/add" method="POST">
-        <label>Student name:</label>
-        <input type="text" name="name" required>
-        <br><br>
+        <section class="card">
+            <h2>Add Student</h2>
+            <form action="/add" method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Student name:</label>
+                        <input type="text" name="name" placeholder="Enter student name" required>
+                    </div>
 
-        {% for subject in subjects %}
-            <label>{{ subject }}:</label>
-            <input type="number" name="{{ subject }}" min="0" max="100"
-                   step="0.1" required>
-            <br><br>
-        {% endfor %}
-
-        <button type="submit">Add Student</button>
-    </form>
-
-    <hr>
-
-    <h2>Search Student</h2>
-    <form action="/search" method="POST">
-        <input type="text" name="search_name" placeholder="Enter student name" required>
-        <button type="submit">Search</button>
-    </form>
-
-    {% if searched %}
-        {% if found_student %}
-            <h3>Student Found: {{ found_student.name }}</h3>
-            {% for subject in subjects %}
-                <p>{{ subject }}: {{ found_student.marks[loop.index0] }}</p>
-            {% endfor %}
-            <p>Average: {{ "%.2f"|format(found_student.average) }}%</p>
-            <p>Grade: {{ found_student.grade }}</p>
-        {% else %}
-            <p>Student not found.</p>
-        {% endif %}
-    {% endif %}
-
-    <hr>
-
-    <h2>Student Records</h2>
-    {% if students %}
-        <table border="1" cellpadding="5">
-            <tr>
-                <th>Name</th>
-                {% for subject in subjects %}
-                    <th>{{ subject }}</th>
-                {% endfor %}
-                <th>Average</th>
-                <th>Grade</th>
-                <th>Action</th>
-            </tr>
-
-            {% for name in students %}
-                <tr>
-                    <td>{{ name }}</td>
-                    {% for mark in marks[loop.index0] %}
-                        <td>{{ mark }}</td>
+                    {% for subject in subjects %}
+                        <div class="form-group">
+                            <label>{{ subject }}:</label>
+                            <input type="number" name="{{ subject }}" min="0" max="100"
+                                   step="0.1" placeholder="0 - 100" required>
+                        </div>
                     {% endfor %}
-                    <td>{{ "%.2f"|format(averages[loop.index0]) }}%</td>
-                    <td>{{ get_grade(averages[loop.index0]) }}</td>
-                    <td><a href="/delete/{{ loop.index0 }}">Delete</a></td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No student records yet.</p>
-    {% endif %}
+                </div>
+                <button type="submit">Add Student</button>
+            </form>
+        </section>
 
-    <hr>
+        <section class="card">
+            <h2>Search Student</h2>
+            <form action="/search" method="POST" class="search-form">
+                <input type="text" name="search_name" placeholder="Enter student name" required>
+                <button type="submit">Search</button>
+            </form>
 
-    <h2>Class Summary</h2>
-    <p>Total students: {{ students|length }}</p>
-    <p>Class average: {{ "%.2f"|format(class_average) }}%</p>
+            {% if searched %}
+                {% if found_student %}
+                    <div class="search-result">
+                        <h3>Student Found: {{ found_student.name }}</h3>
+                        <div class="result-grid">
+                            {% for subject in subjects %}
+                                <p><strong>{{ subject }}:</strong> {{ found_student.marks[loop.index0] }}</p>
+                            {% endfor %}
+                        </div>
+                        <p><strong>Average:</strong> {{ "%.2f"|format(found_student.average) }}%</p>
+                        <p><strong>Grade:</strong> {{ found_student.grade }}</p>
+                    </div>
+                {% else %}
+                    <p class="message">Student not found.</p>
+                {% endif %}
+            {% endif %}
+        </section>
 
-    {% if highest %}
-        <p>Highest performer: {{ highest }}</p>
-        <p>Lowest performer: {{ lowest }}</p>
-    {% endif %}
+        <section class="card">
+            <h2>Student Records</h2>
+            {% if students %}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                {% for subject in subjects %}
+                                    <th>{{ subject }}</th>
+                                {% endfor %}
+                                <th>Average</th>
+                                <th>Grade</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name in students %}
+                                <tr>
+                                    <td>{{ name }}</td>
+                                    {% for mark in marks[loop.index0] %}
+                                        <td>{{ mark }}</td>
+                                    {% endfor %}
+                                    <td>{{ "%.2f"|format(averages[loop.index0]) }}%</td>
+                                    <td>{{ get_grade(averages[loop.index0]) }}</td>
+                                    <td><a class="delete-link" href="/delete/{{ loop.index0 }}">Delete</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="message">No student records yet. Add a student using the form above.</p>
+            {% endif %}
+        </section>
 
-    {% if subject_averages %}
-        <h3>Subject Averages</h3>
-        {% for subject in subjects %}
-            <p>{{ subject }}: {{ "%.2f"|format(subject_averages[loop.index0]) }}%</p>
-        {% endfor %}
-    {% endif %}
+        <section class="card">
+            <h2>Class Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span>Total students</span>
+                    <strong>{{ students|length }}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Class average</span>
+                    <strong>{{ "%.2f"|format(class_average) }}%</strong>
+                </div>
+                {% if highest %}
+                    <div class="summary-item">
+                        <span>Highest performer</span>
+                        <strong>{{ highest }}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Lowest performer</span>
+                        <strong>{{ lowest }}</strong>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if subject_averages %}
+                <h3>Subject Averages</h3>
+                <div class="subject-list">
+                    {% for subject in subjects %}
+                        <p><strong>{{ subject }}:</strong> {{ "%.2f"|format(subject_averages[loop.index0]) }}%</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+
+        <footer>
+            <p>Student Performance Analysis System</p>
+        </footer>
+    </div>
 </body>
 </html>
