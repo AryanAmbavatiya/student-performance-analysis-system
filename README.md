@@ -18,32 +18,58 @@ This project provides a simple Python-based solution for entering and analyzing 
 
 ## Features
 
-- Student data entry
-- Marks validation
-- Student-wise total and average calculation
-- Grade assignment
-- Highest and lowest performer identification
-- Subject-wise average calculation
-- Identification of subjects needing improvement
-- Class performance summary
+- Add student records through an HTML form.
+- Enter and validate marks for six subjects.
+- View all student records in a table.
+- Calculate individual student averages and grades.
+- Search for individual student records.
+- Delete student records.
+- Identify the highest and lowest performers.
+- Calculate class and subject-wise averages.
+- Save student records using CSV file storage.
 
-## Python Concepts Used
+## Technologies Used
 
-- Variables and data types
-- Input and output
-- Conditional statements
-- `for` and `while` loops
-- Lists and nested lists
-- Functions
-- String handling
-- Exception handling
+- **Python** – Application logic and calculations.
+- **Flask** – Backend web framework.
+- **HTML5** – Webpage structure and forms.
+- **CSS3** – Basic webpage styling.
+- **CSV** – Student data storage.
 
 ## How to Run
 
-1. Make sure Python is installed on your computer.
-2. Download or clone this repository.
-3. Open a terminal in the project folder.
-4. Run:
+### 1. Install Python
+
+Make sure Python is installed on your computer.
+
+### 2. Install Dependencies
+
+Open a terminal in the project folder and run:
 
 ```bash
-python student_performance_analysis.py
+pip install -r requirements.txt
+```
+
+### 3. Start the Application
+
+Run the following command:
+
+```bash
+python app.py
+```
+
+### 4. Open the Website
+
+Open your browser and visit:
+
+```text
+http://127.0.0.1:5000
+```
+
+The application will now be running locally on your computer.
+
+## Data Storage
+
+Student records are stored in a CSV file named `student_data.csv`.
+
+The application automatically saves records when students are added or deleted, allowing existing records to be loaded when the application is started again.
