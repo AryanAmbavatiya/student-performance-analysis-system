@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Performance Analysis System</title>
+</head>
+<body>
+    <h1>Student Performance Analysis System</h1>
+
+    <h2>Add Student</h2>
+    <form action="/add" method="POST">
+        <label>Student name:</label>
+        <input type="text" name="name" required>
+        <br><br>
+
+        {% for subject in subjects %}
+            <label>{{ subject }}:</label>
+            <input type="number" name="{{ subject }}" min="0" max="100"
+                   step="0.1" required>
+            <br><br>
+        {% endfor %}
+
+        <button type="submit">Add Student</button>
+    </form>
+
+    <hr>
+
+    <h2>Search Student</h2>
+    <form action="/search" method="POST">
+        <input type="text" name="search_name" placeholder="Enter student name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if searched %}
+        {% if found_student %}
+            <h3>Student Found: {{ found_student.name }}</h3>
+            {% for subject in subjects %}
+                <p>{{ subject }}: {{ found_student.marks[loop.index0] }}</p>
+            {% endfor %}
+            <p>Average: {{ "%.2f"|format(found_student.average) }}%</p>
+            <p>Grade: {{ found_student.grade }}</p>
+        {% else %}
+            <p>Student not found.</p>
+        {% endif %}
+    {% endif %}
+
+    <hr>
+
+    <h2>Student Records</h2>
+    {% if students %}
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Name</th>
+                {% for subject in subjects %}
+                    <th>{{ subject }}</th>
+                {% endfor %}
+                <th>Average</th>
+                <th>Grade</th>
+                <th>Action</th>
+            </tr>
+
+            {% for name in students %}
+                <tr>
+                    <td>{{ name }}</td>
+                    {% for mark in marks[loop.index0] %}
+                        <td>{{ mark }}</td>
+                    {% endfor %}
+                    <td>{{ "%.2f"|format(averages[loop.index0]) }}%</td>
+                    <td>{{ get_grade(averages[loop.index0]) }}</td>
+                    <td><a href="/delete/{{ loop.index0 }}">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No student records yet.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Class Summary</h2>
+    <p>Total students: {{ students|length }}</p>
+    <p>Class average: {{ "%.2f"|format(class_average) }}%</p>
+
+    {% if highest %}
+        <p>Highest performer: {{ highest }}</p>
+        <p>Lowest performer: {{ lowest }}</p>
+    {% endif %}
+
+    {% if subject_averages %}
+        <h3>Subject Averages</h3>
+        {% for subject in subjects %}
+            <p>{{ subject }}: {{ "%.2f"|format(subject_averages[loop.index0]) }}%</p>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
